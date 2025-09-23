@@ -24,20 +24,20 @@ A comprehensive event planning and vendor management REST API built with Spring 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/gracengina/GLBackend.git>
    cd evently
    ```
 
 2. **Configure database** (Update `src/main/resources/application.properties`)
    ```properties
    spring.datasource.url=jdbc:mysql://localhost:3306/evently
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
+   spring.datasource.username=root
+   spring.datasource.password=secret
    ```
 
 3. **Set environment variables** (optional)
    ```bash
-   export JWT_SECRET=your-secure-secret-key
+   export JWT_SECRET=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lMjAyNSIsImlhdCI6MTc1ODU2MTQ3NCwiZXhwIjoxNzU4NjQ3ODc0fQ.2wW11xOr0ddyS8IP_lYeF1pny0U9fQ0vnKpcOBDKcPDOBQm3G0riMKWK7NDukSIjLFDrvqlhn1Y4QFH0FDvwYQ
    export CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080
    ```
 
@@ -59,7 +59,7 @@ A comprehensive event planning and vendor management REST API built with Spring 
 docker build -t evently-backend .
 
 # Run container
-docker run -p 8080:8080 -e JWT_SECRET=your-secret evently-backend
+docker run -p 8080:8080 -e JWT_SECRET=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lMjAyNSIsImlhdCI6MTc1ODU2MTQ3NCwiZXhwIjoxNzU4NjQ3ODc0fQ.2wW11xOr0ddyS8IP_lYeF1pny0U9fQ0vnKpcOBDKcPDOBQm3G0riMKWK7NDukSIjLFDrvqlhn1Y4QFH0FDvwYQ
 ```
 
 ## 🏗️ Architecture
