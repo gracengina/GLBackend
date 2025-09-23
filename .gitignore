@@ -1,0 +1,140 @@
+# ===============================================================================
+# JAVA SPRING BOOT PROJECT - EVENTLY
+# ===============================================================================
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# ===============================================================================
+# MAVEN
+# ===============================================================================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ===============================================================================
+# GRADLE
+# ===============================================================================
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ===============================================================================
+# IDE CONFIGURATION
+# ===============================================================================
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# ===============================================================================
+# OPERATING SYSTEM
+# ===============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+ehthumbs.db
+Thumbs.db
+
+# ===============================================================================
+# ENVIRONMENT AND CONFIGURATION
+# ===============================================================================
+.env
+.env.local
+.env.production
+.env.staging
+application-local.properties
+application-*.yml
+application-*.yaml
+
+# ===============================================================================
+# DATABASE FILES
+# ===============================================================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ===============================================================================
+# APPLICATION UPLOADS AND STORAGE
+# ===============================================================================
+uploads/
+files/
+storage/
+
+# ===============================================================================
+# TEMPORARY FILES
+# ===============================================================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# ===============================================================================
+# SPRING BOOT SPECIFIC
+# ===============================================================================
+# Spring Boot DevTools
+.spring-boot-devtools.properties
+
+# Actuator
+/actuator/
+
+# H2 Database files
+*.mv.db
+*.trace.db

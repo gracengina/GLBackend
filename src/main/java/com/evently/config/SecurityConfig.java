@@ -1,0 +1,209 @@
+package com.evently.config;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.evently.security.JwtAuthenticationEntryPoint;
+import com.evently.security.JwtAuthenticationFilter;
+
+/**
+ * Comprehensive Security Configuration.
+ * Provides JWT authentication, authorization, CORS, and security headers.
+ */
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
+
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:8080}")
+    private String allowedOrigins;
+
+    // Constructor injection to avoid circular dependencies
+    public SecurityConfig(UserDetailsService userDetailsService, 
+                         PasswordEncoder passwordEncoder,
+                         JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                         JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // Disable CSRF for stateless JWT authentication
+            .csrf(csrf -> csrf.disable())
+            
+            // Configure CORS
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            
+            // Configure session management to be stateless
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            
+            // Configure authentication entry point
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            )
+            
+            // Configure authorization rules
+            .authorizeHttpRequests(authz -> authz
+                // Public endpoints - no authentication required
+                .requestMatchers(HttpMethod.GET, "/health", "/actuator/health").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/docs", "/api/documentation/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/verify-email/**").permitAll()
+                
+                // Public read-only endpoints for vendors and events
+                .requestMatchers(HttpMethod.GET, "/api/vendors", "/api/vendors/{id}", "/api/vendors/search").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/vendors/{vendorId}/services", "/api/vendors/{vendorId}/portfolio").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/vendors/{vendorId}/reviews").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/events", "/api/events/{id}", "/api/events/search").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/events/upcoming", "/api/events/by-location").permitAll()
+                
+                // Admin endpoints - require ADMIN role
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/users/{id}/role").hasRole("ADMIN")
+                
+                // Vendor-specific endpoints - require VENDOR role
+                .requestMatchers(HttpMethod.POST, "/api/vendors/profile").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.PUT, "/api/vendors/{id}").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.POST, "/api/vendors/{vendorId}/services").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.PUT, "/api/vendors/services/{serviceId}").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/vendors/services/{serviceId}").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.POST, "/api/vendors/{vendorId}/portfolio").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.PUT, "/api/vendors/portfolio/{itemId}").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/vendors/portfolio/{itemId}").hasRole("VENDOR")
+                .requestMatchers(HttpMethod.PUT, "/api/bookings/{id}/confirm", "/api/bookings/{id}/reject").hasRole("VENDOR")
+                
+                // Event planner endpoints - require PLANNER role
+                .requestMatchers(HttpMethod.POST, "/api/events").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.PUT, "/api/events/{id}").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.DELETE, "/api/events/{id}").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.POST, "/api/events/{id}/guests").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.PUT, "/api/events/{id}/guests/{guestId}").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.DELETE, "/api/events/{id}/guests/{guestId}").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.POST, "/api/bookings").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.PUT, "/api/bookings/{id}").hasRole("PLANNER")
+                .requestMatchers(HttpMethod.DELETE, "/api/bookings/{id}").hasRole("PLANNER")
+                
+                // All other endpoints require authentication
+                .anyRequest().authenticated()
+            )
+            
+            // Configure security headers
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.deny())
+                .contentTypeOptions(contentTypeOptions -> {})
+                .httpStrictTransportSecurity(hstsConfig -> hstsConfig
+                    .maxAgeInSeconds(31536000)
+                    .includeSubDomains(true)
+                )
+                .referrerPolicy(referrerPolicy -> 
+                    referrerPolicy.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                )
+            )
+            
+            // Add authentication provider
+            .authenticationProvider(authenticationProvider())
+            
+            // Add JWT filter
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Configure allowed origins - include patterns for local network IPs
+        List<String> origins = new ArrayList<>(Arrays.asList(allowedOrigins));
+        // Add common local network patterns for development
+        origins.add("http://192.168.*:*");
+        origins.add("http://10.0.*:*");
+        origins.add("http://172.16.*:*");
+        
+        configuration.setAllowedOriginPatterns(origins);
+        
+        // Configure allowed methods
+        configuration.setAllowedMethods(Arrays.asList(
+            HttpMethod.GET.name(),
+            HttpMethod.POST.name(),
+            HttpMethod.PUT.name(),
+            HttpMethod.DELETE.name(),
+            HttpMethod.OPTIONS.name()
+        ));
+        
+        // Configure allowed headers
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+        ));
+        
+        // Configure exposed headers
+        configuration.setExposedHeaders(Arrays.asList(
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Credentials",
+            "Authorization"
+        ));
+        
+        // Allow credentials
+        configuration.setAllowCredentials(true);
+        
+        // Configure max age
+        configuration.setMaxAge(Duration.ofHours(1));
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        
+        return source;
+    }
+}
