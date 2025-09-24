@@ -84,33 +84,34 @@ public class AuthController {
     /**
      * Authenticate user and return JWT token.
      */
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginDTO loginDTO) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginDTO.getUsername(),
-                    loginDTO.getPassword()
-                )
-            );
+   @PostMapping("/login")
+public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginDTO loginDTO) {
+    try {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginDTO.getUsername(),
+                loginDTO.getPassword()
+            )
+        );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            
-            String jwt = jwtTokenProvider.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenProvider.generateToken(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Map<String, Object> body = new HashMap<>();
+        body.put("token", jwt);
+        body.put("type", "Bearer");
+        body.put("username", userDetails.getUsername());
+        body.put("roles", userDetails.getAuthorities());
 
-            return ResponseEntity.ok(new JwtResponse(
-                jwt,
-                "Bearer",
-                userDetails.getUsername(),
-                userDetails.getAuthorities().toString()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("Authentication failed", "Invalid username or password"));
-        }
+        return ResponseEntity.ok(body);
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Authentication failed", 
+                             "message", "Invalid username or password"));
     }
+}
 
     /**
      * Get current user profile.
