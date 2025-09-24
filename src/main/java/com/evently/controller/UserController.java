@@ -42,14 +42,23 @@ public class UserController {
      * Register a new user.
      */
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDTO) {
-        try {
-            UserDTO user = userService.registerUser(registrationDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDTO) {
+    try {
+        UserDTO user = userService.registerUser(registrationDTO);
+
+        // Generate JWT for the new user
+        String token = jwtTokenUtil.generateToken(user.getUsername()); // replace with your JWT method
+
+        // Build a response with user and token
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+        response.put("token", token);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
     }
+}
     
     /**
      * Authenticate user login.
