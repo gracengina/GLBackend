@@ -60,10 +60,9 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
     }
 }
     
-    /**
-     * Authenticate user login.
-     * Note: This is a simplified version. In a real application, Spring Security would handle authentication.
-     */
+  
+     // Authenticate user login.
+
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser(@Valid @RequestBody UserLoginDTO loginDTO) {
         try {
@@ -131,10 +130,9 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         }
     }
     
-    /**
-     * Delete user by ID (admin only).
-     * Note: UserService doesn't have deleteUser method, so this is not implemented.
-     */
+    
+      //Delete user by ID (admin only).
+     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         // UserService doesn't have delete functionality
@@ -143,10 +141,9 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
     
     // Query Endpoints
     
-    /**
-     * Get all users with pagination.
-     * Note: UserService doesn't have getAllUsers method with pagination.
-     */
+    
+     // Get all users with pagination.
+     
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         // Since there's no paginated method, return active users as an alternative
@@ -154,10 +151,9 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         return ResponseEntity.ok(users);
     }
     
-    /**
-     * Search users by term.
-     * Note: UserService doesn't have searchUsers method.
-     */
+    //Search users by term.
+     
+     
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String query) {
         // Since search method doesn't exist, return all active users
@@ -194,20 +190,17 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
     
     // Role Management
     
-    /**
-     * Set user as planner.
-     * Note: UserService doesn't have setUserAsPlanner method.
-     */
+    
+     //Set user as planner.
+     
+     
     @PutMapping("/{id}/make-planner")
     public ResponseEntity<Void> makeUserPlanner(@PathVariable Long id) {
         // UserService doesn't have role management methods
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
     
-    /**
-     * Set user as vendor.
-     * Note: UserService doesn't have setUserAsVendor method.
-     */
+    //Set user as vendor
     @PutMapping("/{id}/make-vendor")
     public ResponseEntity<Void> makeUserVendor(@PathVariable Long id) {
         // UserService doesn't have role management methods
