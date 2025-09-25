@@ -1,6 +1,8 @@
 package com.evently.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,9 @@ import com.evently.dto.user.UserLoginDTO;
 import com.evently.dto.user.UserRegistrationDTO;
 import com.evently.dto.user.UserUpdateDTO;
 import com.evently.service.UserService;
+import com.evently.security.JwtTokenProvider;   // ✅ import your JWT provider
 
 import jakarta.validation.Valid;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * REST Controller for User management.
@@ -34,41 +35,42 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
-    
-    // Authentication Endpoints
-    
+
+    // ✅ Inject the JWT provider so we can create tokens
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     /**
-     * Register a new user.
+     * Register a new user and return a JWT token.
      */
     @PostMapping("/register")
-public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDTO) {
-    try {
-        UserDTO user = userService.registerUser(registrationDTO);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDTO) {
+        try {
+            UserDTO user = userService.registerUser(registrationDTO);
 
-        // Generate JWT for the new user
-        String token = jwtTokenUtil.generateToken(user.getUsername()); // replace with your JWT method
+            // Generate JWT for the new user
+            String token = jwtTokenProvider.generateTokenFromUsername(user.getUsername());
 
-        // Build a response with user and token
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", user);
-        response.put("token", token);
+            // Build a response with user info and token
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user);
+            response.put("token", token);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
+        }
     }
-}
-    
-  
-     // Authenticate user login.
 
+    /**
+     * Authenticate user login (basic example – adjust if using Spring Security login flow).
+     */
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser(@Valid @RequestBody UserLoginDTO loginDTO) {
         try {
-            // This would typically be handled by Spring Security
             return userService.getUserByUsername(loginDTO.getUsername())
                     .map(user -> ResponseEntity.ok(user))
                     .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -76,29 +78,27 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
-    // Profile Management
-    
+
     /**
      * Get current user profile.
      */
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.getUserByUsername(userDetails.getUsername())
-                .map(user -> ResponseEntity.ok(user))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Get user by ID.
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(user -> ResponseEntity.ok(user))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Update current user profile.
      */
@@ -109,14 +109,13 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         try {
             UserDTO currentUser = userService.getUserByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
-            
             UserDTO updatedUser = userService.updateUserProfile(currentUser.getId(), updateDTO);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     /**
      * Update user by ID (admin only).
      */
@@ -131,38 +130,33 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
             return ResponseEntity.badRequest().build();
         }
     }
-    
-    
-      //Delete user by ID (admin only).
-     
+
+    /**
+     * Delete user by ID (admin only).
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        // UserService doesn't have delete functionality
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
-    
-    // Query Endpoints
-    
-    
-     // Get all users with pagination.
-     
+
+    /**
+     * Get all users.
+     */
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        // Since there's no paginated method, return active users as an alternative
         List<UserDTO> users = userService.getAllActiveUsers();
         return ResponseEntity.ok(users);
     }
-    
-    //Search users by term.
-     
-     
+
+    /**
+     * Search users by term.
+     */
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String query) {
-        // Since search method doesn't exist, return all active users
         List<UserDTO> users = userService.getAllActiveUsers();
         return ResponseEntity.ok(users);
     }
-    
+
     /**
      * Get all planners.
      */
@@ -171,7 +165,7 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         List<UserDTO> planners = userService.getAllPlanners();
         return ResponseEntity.ok(planners);
     }
-    
+
     /**
      * Get all vendors.
      */
@@ -180,7 +174,7 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         List<UserDTO> vendors = userService.getAllVendors();
         return ResponseEntity.ok(vendors);
     }
-    
+
     /**
      * Get all active users.
      */
@@ -189,26 +183,7 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
         List<UserDTO> activeUsers = userService.getAllActiveUsers();
         return ResponseEntity.ok(activeUsers);
     }
-    
-    // Role Management
-    
-    
-     //Set user as planner.
-     
-     
-    @PutMapping("/{id}/make-planner")
-    public ResponseEntity<Void> makeUserPlanner(@PathVariable Long id) {
-        // UserService doesn't have role management methods
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
-    }
-    
-    //Set user as vendor
-    @PutMapping("/{id}/make-vendor")
-    public ResponseEntity<Void> makeUserVendor(@PathVariable Long id) {
-        // UserService doesn't have role management methods
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
-    }
-    
+
     /**
      * Activate user.
      */
@@ -221,7 +196,7 @@ public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO re
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     /**
      * Deactivate user.
      */
