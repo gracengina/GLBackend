@@ -77,11 +77,12 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint))
             .authorizeHttpRequests(authz -> authz
+                // Authentication endpoints - Must come first for precedence
+                .requestMatchers("/auth/register", "/auth/login").permitAll()
+                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
                 // Public endpoints
                 .requestMatchers(HttpMethod.GET, "/health", "/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/docs", "/api/documentation/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/verify-email/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/vendors", "/api/vendors/{id}", "/api/vendors/search").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/vendors/{vendorId}/services", "/api/vendors/{vendorId}/portfolio").permitAll()
