@@ -24,6 +24,8 @@ import com.evently.dto.user.UserUpdateDTO;
 import com.evently.service.UserService;
 
 import jakarta.validation.Valid;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * REST Controller for User management.
