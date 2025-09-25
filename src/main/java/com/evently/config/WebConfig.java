@@ -76,7 +76,27 @@ public class WebConfig implements WebMvcConfigurer {
                 
         // Additional permissive configuration for development
         registry.addMapping("/api/**")
-                .allowedOriginPatterns("http://192.168.*:*", "http://10.0.*:*", "http://172.16.*:*")
+                .allowedOriginPatterns(
+                    "http://192.168.*:*", 
+                    "http://10.0.*:*", 
+                    "http://172.16.*:*",
+                    "http://127.0.0.1:*",
+                    "http://localhost:*"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
+
+        // Additional mapping for auth endpoints specifically
+        registry.addMapping("/auth/**")
+                .allowedOriginPatterns(
+                    "http://192.168.*:*", 
+                    "http://10.0.*:*", 
+                    "http://172.16.*:*",
+                    "http://127.0.0.1:*",
+                    "http://localhost:*"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

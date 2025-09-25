@@ -145,6 +145,10 @@ public class SecurityConfig {
         origins.add("http://192.168.*:*");
         origins.add("http://10.0.*:*");
         origins.add("http://172.16.*:*");
+        
+        // Add common development patterns
+        origins.add("http://localhost:*");
+        origins.add("http://127.0.0.1:*");
 
         configuration.setAllowedOriginPatterns(origins);
 
