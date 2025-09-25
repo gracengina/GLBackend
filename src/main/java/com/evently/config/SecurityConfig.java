@@ -12,8 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder; // <-- reuse existing bean
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,11 +24,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+    // Reuse existing PasswordEncoder bean from com.evently.config.PasswordConfig
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
                                                          PasswordEncoder passwordEncoder) {
@@ -47,9 +42,17 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/health", "/health/**", "/actuator/health",
-                                 "/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/favicon.ico")
-                .permitAll()
+                .requestMatchers(
+                    "/",
+                    "/health", "/health/**",
+                    "/actuator/health",
+                    "/api/auth/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/favicon.ico"
+                    // , "/version"       // uncomment if you added VersionController and want it public
+                    // , "/api/endpoints" // uncomment if this should be public
+                ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             )
