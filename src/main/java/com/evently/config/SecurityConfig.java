@@ -53,7 +53,9 @@ public class SecurityConfig {
                     ,"/version"       
                      , "/api/endpoints/**" 
                 ).permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/authenticate").permitAll()
+                 .requestMatchers("/api/users/register").permitAll() 
+                .requestMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
