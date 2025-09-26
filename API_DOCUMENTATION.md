@@ -100,7 +100,8 @@ Content-Type: application/json
 
 {
   "username": "johndoe",
-  "password": "password123"
+  "password": "password123",
+  "rememberMe": false
 }
 ```
 
@@ -109,11 +110,8 @@ Content-Type: application/json
 {
   "token": "eyJhbGciOiJIUzUxMiJ9...",
   "type": "Bearer",
-  "id": 1,
   "username": "johndoe",
-  "email": "john@example.com",
-  "authorities": "[ROLE_USER]",
-  "message": "Login successful"
+  "roles": ["ROLE_USER"]
 }
 ```
 
@@ -379,10 +377,42 @@ Authorization: Bearer <token>
 
 ## 🎉 **8. Event Management Endpoints**
 
-### **GET /api/events** - Get All Events (Protected)
+### **GET /api/events** - Get All Events with Pagination (Protected)
 ```http
-GET /api/events
+GET /api/events?page=0&size=20
 Authorization: Bearer <token>
+```
+
+**Query Parameters:**
+- `page` (optional): Page number, default is 0
+- `size` (optional): Page size, default is 20
+
+**Response:**
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "title": "Wedding Reception",
+      "description": "Beautiful wedding celebration",
+      "date": "2025-12-25T18:00:00",
+      "location": "Grand Ballroom, NYC",
+      "budget": 10000.00,
+      "plannerId": 1,
+      "plannerName": "John Doe",
+      "createdAt": "2025-09-26T10:00:00",
+      "updatedAt": "2025-09-26T10:00:00"
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 20
+  },
+  "totalElements": 1,
+  "totalPages": 1,
+  "size": 20,
+  "numberOfElements": 1
+}
 ```
 
 ### **GET /api/events/{id}** - Get Event by ID (Public)
@@ -452,7 +482,27 @@ Content-Type: application/json
 {
   "name": "Jane Doe",
   "email": "jane@example.com",
-  "rsvpStatus": "PENDING"
+  "phone": "555-1234",
+  "dietaryRestrictions": "Vegetarian"
+}
+```
+
+**Note**: RSVP status is automatically set to "INVITED" when a guest is added.
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "555-1234",
+  "dietaryRestrictions": "Vegetarian",
+  "rsvpStatus": "invited",
+  "eventId": 1,
+  "eventTitle": "Wedding Reception",
+  "eventDate": "2025-12-25T18:00:00",
+  "createdAt": "2025-09-26T10:00:00",
+  "updatedAt": "2025-09-26T10:00:00"
 }
 ```
 
@@ -462,10 +512,45 @@ GET /api/events/1/guests
 Authorization: Bearer <token>
 ```
 
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "phone": "555-1234",
+    "dietaryRestrictions": "Vegetarian",
+    "rsvpStatus": "attending",
+    "eventId": 1,
+    "eventTitle": "Wedding Reception",
+    "eventDate": "2025-12-25T18:00:00",
+    "createdAt": "2025-09-26T10:00:00",
+    "updatedAt": "2025-09-26T10:00:00"
+  }
+]
+```
+
+### **GET /api/events/{eventId}/guests/status/{status}** - Get Guests by RSVP Status (Protected)
+```http
+GET /api/events/1/guests/status/attending
+Authorization: Bearer <token>
+```
+
+**Valid RSVP Status Values:** `invited`, `attending`, `declined`
+
 ### **PUT /api/events/guests/{guestId}** - Update Guest (Protected)
 ```http
 PUT /api/events/guests/1
 Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "janesmith@example.com",
+  "phone": "555-5678",
+  "dietaryRestrictions": "Vegan"
+}
 ```
 
 ### **DELETE /api/events/guests/{guestId}** - Remove Guest (Protected)
@@ -474,9 +559,28 @@ DELETE /api/events/guests/1
 Authorization: Bearer <token>
 ```
 
-### **PUT /api/events/guests/{guestId}/rsvp/{status}** - Update RSVP Status
+### **PUT /api/events/guests/{guestId}/rsvp/{status}** - Update RSVP Status (Public)
 ```http
-PUT /api/events/guests/1/rsvp/ACCEPTED
+PUT /api/events/guests/1/rsvp/attending
+```
+
+**Valid RSVP Status Values:** `invited`, `attending`, `declined`
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "555-1234",
+  "dietaryRestrictions": "Vegetarian",
+  "rsvpStatus": "attending",
+  "eventId": 1,
+  "eventTitle": "Wedding Reception",
+  "eventDate": "2025-12-25T18:00:00",
+  "createdAt": "2025-09-26T10:00:00",
+  "updatedAt": "2025-09-26T10:00:00"
+}
 ```
 
 ---
@@ -728,15 +832,14 @@ class AuthService {
       if (response.token) {
         localStorage.setItem('authToken', response.token);
         localStorage.setItem('user', JSON.stringify({
-          id: response.id,
           username: response.username,
-          email: response.email
+          roles: response.roles
         }));
       }
       
       return response;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Login failed');
+      throw new Error(error.response?.data?.message || error.response?.data?.error || 'Login failed');
     }
   }
 
@@ -1234,6 +1337,37 @@ export const apiRequest = async (endpoint, options = {}) => {
 
 ## 📋 **Quick Reference**
 
+### **Main API Endpoints**
+
+**Authentication** (use `/auth/*`):
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login  
+- `GET /auth/profile` - Get current user profile
+
+**User Management** (use `/api/users/*`):
+- `GET /api/users` - Get all users (paginated)
+- `GET /api/users/me` - Get current user
+- `GET /api/users/{id}` - Get user by ID
+- `PUT /api/users/{id}` - Update user
+
+**Events** (use `/api/events/*`):
+- `GET /api/events?page=0&size=20` - Get all events (paginated)
+- `POST /api/events` - Create event
+- `GET /api/events/{id}` - Get event by ID
+- `PUT /api/events/{id}` - Update event
+- `DELETE /api/events/{id}` - Delete event
+
+**Event Guests** (use `/api/events/*`):
+- `POST /api/events/{eventId}/guests` - Add guest
+- `GET /api/events/{eventId}/guests` - Get event guests
+- `PUT /api/events/guests/{guestId}/rsvp/{status}` - Update RSVP status
+
+**Vendors** (use `/api/vendors/*`):
+- `GET /api/vendors?page=0&size=20` - Get all vendors (paginated)
+- `POST /api/vendors/profile` - Create vendor profile
+- `GET /api/vendors/{id}` - Get vendor by ID
+- `GET /api/vendors/search?query=...` - Search vendors
+
 ### **Authentication Headers**
 ```
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9...
@@ -1247,7 +1381,27 @@ Content-Type: application/json
 - `401` - Unauthorized
 - `403` - Forbidden
 - `404` - Not Found
+- `405` - Method Not Allowed (check HTTP method)
 - `500` - Internal Server Error
+
+### **Common Errors and Solutions**
+
+**❌ "Request method 'GET' is not supported"**
+- **Cause**: Using GET method on POST-only endpoints
+- **Solution**: Use correct HTTP methods:
+  - Authentication: `POST /auth/login`, `POST /auth/register`
+  - Creating resources: `POST /api/events`, `POST /api/vendors/profile`
+  - Updating resources: `PUT /api/events/{id}`, `PUT /api/users/{id}`
+
+**❌ "401 Unauthorized"**
+- **Cause**: Missing or invalid JWT token
+- **Solution**: Include `Authorization: Bearer <token>` header
+
+**❌ "404 Not Found"**  
+- **Cause**: Wrong endpoint URL
+- **Solution**: Use correct base paths:
+  - Auth: `/auth/*` (not `/api/auth/*`)
+  - Other APIs: `/api/*`
 
 ### **Base URLs for Different Environments**
 - **Development**: `http://192.168.100.7:8080`

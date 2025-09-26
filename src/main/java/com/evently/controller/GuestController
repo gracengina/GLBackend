@@ -1,28 +1,27 @@
 package com.evently.controller;
 
+import com.evently.dto.guest.GuestCreateUpdateDTO;
 import com.evently.dto.guest.GuestDTO;
+import com.evently.mapper.GuestMapper;
+import com.evently.model.Guest;
+import com.evently.service.GuestService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/guests")
+@RequiredArgsConstructor
 public class GuestController {
 
-    // Inject your GuestService here if you have one
-    // private final GuestService guestService;
-
-    // public GuestController(GuestService guestService) {
-    //     this.guestService = guestService;
-    // }
+    private final GuestService guestService;
+    private final GuestMapper guestMapper;
 
     @PostMapping
-    public ResponseEntity<?> createGuest(@Valid @RequestBody GuestDTO guest) {
-        // Save guest via service or repository
-        // guestService.save(guest);
-
-        // For now just return the guest DTO
-        return ResponseEntity.status(HttpStatus.CREATED).body(guest);
+    public ResponseEntity<GuestDTO> createGuest(@Valid @RequestBody GuestCreateUpdateDTO dto) {
+        Guest guest = guestService.createGuest(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(guestMapper.toGuestDTO(guest));
     }
 }

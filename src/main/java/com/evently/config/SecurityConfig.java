@@ -1,4 +1,4 @@
-package com.evently.security;
+package com.evently.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.evently.security.JwtAuthenticationFilter;
+
 @Configuration
 public class SecurityConfig {
 
@@ -25,6 +27,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @SuppressWarnings("deprecation")
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
                                                          PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -45,16 +48,16 @@ public class SecurityConfig {
                     "/",
                     "/health", "/health/**",
                     "/actuator/health",
-                    "/api/auth/**",
+                    "/auth/**",                    // Fixed: Changed from /api/auth/** to /auth/**
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/favicon.ico",
                     "/version",
                     "/api/endpoints/**",
                     "/authenticate",
-                    "/auth/register"
+                    "/api/docs"                    // Added API docs endpoint
                 ).permitAll()
-                .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/vendors/**", "/api/events/**").permitAll()  // Specific GET endpoints
                 .anyRequest().authenticated()
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

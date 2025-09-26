@@ -2,9 +2,7 @@ package com.evently.exception;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +15,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -94,8 +91,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         
+        Class<?> requiredType = ex.getRequiredType();
+        String typeName = requiredType != null ? requiredType.getSimpleName() : "Unknown";
         String message = String.format("Invalid value '%s' for parameter '%s'. Expected type: %s",
-            ex.getValue(), ex.getName(), ex.getRequiredType().getSimpleName());
+            ex.getValue(), ex.getName(), typeName);
 
         ErrorResponse errorResponse = new ErrorResponse(
             HttpStatus.BAD_REQUEST.value(),

@@ -33,8 +33,9 @@ public class EventlyApiIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().contains("UP"));
+        String responseBody = response.getBody();
+        assertNotNull(responseBody);
+        assertTrue(responseBody.contains("UP"));
     }
 
     @Test
@@ -43,8 +44,9 @@ public class EventlyApiIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().contains("pong"));
+        String responseBody = response.getBody();
+        assertNotNull(responseBody);
+        assertTrue(responseBody.contains("pong"));
     }
 
     @Test
@@ -53,8 +55,9 @@ public class EventlyApiIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().contains("Evently API"));
+        String responseBody = response.getBody();
+        assertNotNull(responseBody);
+        assertTrue(responseBody.contains("Evently API"));
     }
 
     @Test

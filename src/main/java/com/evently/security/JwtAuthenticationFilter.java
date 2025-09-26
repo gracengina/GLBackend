@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtTokenProvider tokenProvider;
     private final UserDetailsService userDetailsService;
@@ -59,14 +59,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    logger.debug("Authentication set for user: {}", username);
+                    log.debug("Authentication set for user: {}", username);
                 }
             }
         } catch (org.springframework.security.core.userdetails.UsernameNotFoundException e) {
-            logger.debug("User not found for token subject", e);
+            log.debug("User not found for token subject", e);
             SecurityContextHolder.clearContext();
         } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
+            log.error("Could not set user authentication in security context", ex);
             SecurityContextHolder.clearContext();
         }
 
@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /** Skip filter for public endpoints and CORS preflight. */
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         String path = request.getRequestURI();
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true; // allow CORS preflight

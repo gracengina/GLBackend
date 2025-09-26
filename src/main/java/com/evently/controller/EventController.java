@@ -3,6 +3,9 @@ package com.evently.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evently.model.Guest;
-import com.evently.dto.booking.GuestCreateUpdateDTO;
-import com.evently.dto.booking.GuestDTO;
+import com.evently.dto.guest.GuestCreateUpdateDTO;
+import com.evently.dto.guest.GuestDto;
 import com.evently.dto.event.EventCreateDTO;
 import com.evently.dto.event.EventDTO;
 import com.evently.dto.event.EventUpdateDTO;
@@ -44,6 +47,17 @@ public class EventController {
     private UserService userService;
     
     // Event Management
+    
+    /**
+     * Get all events (Protected endpoint).
+     */
+    @GetMapping
+    public ResponseEntity<Page<EventDTO>> getAllEvents(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EventDTO> events = eventService.getAllEvents(pageable);
+        return ResponseEntity.ok(events);
+    }
     
     /**
      * Create a new event.
@@ -178,7 +192,7 @@ public class EventController {
      * Add guest to event.
      */
     @PostMapping("/{eventId}/guests")
-    public ResponseEntity<GuestDTO> addGuestToEvent(
+    public ResponseEntity<GuestDto> addGuestToEvent(
             @PathVariable Long eventId,
             @Valid @RequestBody GuestCreateUpdateDTO guestDTO,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -188,7 +202,7 @@ public class EventController {
                     .orElseThrow(() -> new IllegalArgumentException("User not found"))
                     .getId();
             
-            GuestDTO guest = eventService.addGuestToEvent(eventId, guestDTO, plannerId);
+            GuestDto guest = eventService.addGuestToEvent(eventId, guestDTO, plannerId);
             return ResponseEntity.status(HttpStatus.CREATED).body(guest);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -199,8 +213,8 @@ public class EventController {
      * Get guests for an event.
      */
     @GetMapping("/{eventId}/guests")
-    public ResponseEntity<List<GuestDTO>> getGuestsByEvent(@PathVariable Long eventId) {
-        List<GuestDTO> guests = eventService.getGuestsByEvent(eventId);
+    public ResponseEntity<List<GuestDto>> getGuestsByEvent(@PathVariable Long eventId) {
+        List<GuestDto> guests = eventService.getGuestsByEvent(eventId);
         return ResponseEntity.ok(guests);
     }
     
@@ -208,12 +222,12 @@ public class EventController {
      * Get guests by RSVP status.
      */
     @GetMapping("/{eventId}/guests/status/{status}")
-    public ResponseEntity<List<GuestDTO>> getGuestsByEventAndRsvpStatus(
+    public ResponseEntity<List<GuestDto>> getGuestsByEventAndRsvpStatus(
             @PathVariable Long eventId,
             @PathVariable String status) {
         try {
             Guest.RsvpStatus rsvpStatus = Guest.RsvpStatus.valueOf(status.toUpperCase());
-            List<GuestDTO> guests = eventService.getGuestsByEventAndRsvpStatus(eventId, rsvpStatus);
+            List<GuestDto> guests = eventService.getGuestsByEventAndRsvpStatus(eventId, rsvpStatus);
             return ResponseEntity.ok(guests);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -224,7 +238,7 @@ public class EventController {
      * Update guest.
      */
     @PutMapping("/guests/{guestId}")
-    public ResponseEntity<GuestDTO> updateGuest(
+    public ResponseEntity<GuestDto> updateGuest(
             @PathVariable Long guestId,
             @Valid @RequestBody GuestCreateUpdateDTO guestDTO,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -234,7 +248,7 @@ public class EventController {
                     .orElseThrow(() -> new IllegalArgumentException("User not found"))
                     .getId();
             
-            GuestDTO updatedGuest = eventService.updateGuest(guestId, guestDTO, plannerId);
+            GuestDto updatedGuest = eventService.updateGuest(guestId, guestDTO, plannerId);
             return ResponseEntity.ok(updatedGuest);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -265,12 +279,12 @@ public class EventController {
      * Update guest RSVP status.
      */
     @PutMapping("/guests/{guestId}/rsvp/{status}")
-    public ResponseEntity<GuestDTO> updateGuestRsvpStatus(
+    public ResponseEntity<GuestDto> updateGuestRsvpStatus(
             @PathVariable Long guestId,
             @PathVariable String status) {
         try {
             Guest.RsvpStatus rsvpStatus = Guest.RsvpStatus.valueOf(status.toUpperCase());
-            GuestDTO updatedGuest = eventService.updateGuestRsvpStatus(guestId, rsvpStatus);
+            GuestDto updatedGuest = eventService.updateGuestRsvpStatus(guestId, rsvpStatus);
             return ResponseEntity.ok(updatedGuest);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
