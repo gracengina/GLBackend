@@ -50,8 +50,8 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/favicon.ico"
-                    // , "/version"       // uncomment if you added VersionController and want it public
-                    // , "/api/endpoints" // uncomment if this should be public
+                    ,"/version"       
+                     , "/api/endpoints/**" 
                 ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
