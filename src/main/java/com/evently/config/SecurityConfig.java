@@ -52,7 +52,6 @@ public class SecurityConfig {
                     "/version",
                     "/api/endpoints/**",
                     "/authenticate",
-                    "/api/users/register",
                     "/auth/register"
                 ).permitAll()
                 .requestMatchers(HttpMethod.GET).permitAll()
