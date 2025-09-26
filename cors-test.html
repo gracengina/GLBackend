@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test</h1>
+    <button onclick="testCORS()">Test CORS to Backend</button>
+    <div id="result"></div>
+
+    <script>
+        async function testCORS() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing CORS...';
+            
+            try {
+                // First test health endpoint (no auth needed)
+                const healthResponse = await fetch('http://localhost:8080/health', {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include'
+                });
+                
+                if (healthResponse.ok) {
+                    const healthData = await healthResponse.json();
+                    resultDiv.innerHTML = `
+                        <h3>✅ CORS is working!</h3>
+                        <p><strong>Health check successful:</strong></p>
+                        <pre>${JSON.stringify(healthData, null, 2)}</pre>
+                        <p>Your frontend can communicate with the backend.</p>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${healthResponse.status}: ${healthResponse.statusText}`);
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ CORS Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Check browser console for more details.</p>
+                `;
+                console.error('CORS Test Error:', error);
+            }
+        }
+
+        // Test on page load
+        window.onload = () => {
+            console.log('Frontend running on:', window.location.origin);
+            console.log('Backend URL:', 'http://localhost:8080');
+        };
+    </script>
+</body>
+</html>

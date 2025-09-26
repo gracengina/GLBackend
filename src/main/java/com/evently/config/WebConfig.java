@@ -74,14 +74,17 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(allowCredentials)
                 .maxAge(maxAge);
                 
-        // Additional permissive configuration for development
+        // Additional permissive configuration for development and deployment
         registry.addMapping("/api/**")
                 .allowedOriginPatterns(
                     "http://192.168.*:*", 
                     "http://10.0.*:*", 
                     "http://172.16.*:*",
                     "http://127.0.0.1:*",
-                    "http://localhost:*"
+                    "http://localhost:*",
+                    "https://*.onrender.com",
+                    "https://*.netlify.app",
+                    "https://*.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
@@ -95,7 +98,10 @@ public class WebConfig implements WebMvcConfigurer {
                     "http://10.0.*:*", 
                     "http://172.16.*:*",
                     "http://127.0.0.1:*",
-                    "http://localhost:*"
+                    "http://localhost:*",
+                    "https://*.onrender.com",
+                    "https://*.netlify.app", 
+                    "https://*.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
