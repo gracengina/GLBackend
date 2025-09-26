@@ -11,23 +11,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * General Application Configuration.
- * Provides common beans and configuration for the application.
+/*
+ Provides common beans and configuration for the application.
  */
 @Configuration
 public class AppConfig {
 
-    /**
-     * REST template for external API calls.
+    /*
+    REST template for external API calls.
      */
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
-    /**
-     * Object mapper with proper date/time handling.
+    /*
+    Object mapper with proper date/time handling.
      */
     @Bean
     public ObjectMapper objectMapper() {
@@ -45,24 +44,24 @@ public class AppConfig {
         return mapper;
     }
 
-    /**
-     * Date time formatter for API responses.
+    /*
+     Date time formatter for API responses.
      */
     @Bean
     public DateTimeFormatter dateTimeFormatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     }
 
-    /**
-     * Date formatter for API responses.
+    /*
+     Date formatter for API responses.
      */
     @Bean
     public DateTimeFormatter dateFormatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 
-    /**
-     * Application properties configuration.
+    /*
+    Application properties configuration.
      */
     @ConfigurationProperties(prefix = "app")
     public static class AppProperties {
