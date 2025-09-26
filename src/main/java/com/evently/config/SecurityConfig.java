@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder; // <-- reuse existing bean
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,7 +24,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // Reuse existing PasswordEncoder bean from com.evently.config.PasswordConfig
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
                                                          PasswordEncoder passwordEncoder) {
@@ -49,12 +48,13 @@ public class SecurityConfig {
                     "/api/auth/**",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
-                    "/favicon.ico"
-                    ,"/version"       
-                     , "/api/endpoints/**" 
+                    "/favicon.ico",
+                    "/version",
+                    "/api/endpoints/**",
+                    "/authenticate",
+                    "/api/users/register",
+                    "/auth/register"
                 ).permitAll()
-                .requestMatchers("/authenticate").permitAll()
-                 .requestMatchers("/api/users/register").permitAll() 
                 .requestMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().authenticated()
             )
