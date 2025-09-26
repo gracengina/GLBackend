@@ -5,7 +5,8 @@ Evently is a comprehensive event management platform with vendor services, built
 
 ### **Base Information**
 - **API Version**: 1.0.0
-- **Base URL**: `http://your-backend-ip:8080`
+- **Base URL**: `https://evently-avc4.onrender.com`
+- **Local Development URL**: `http://localhost:8080`
 - **Authentication**: JWT Bearer Token
 - **Content Type**: `application/json`
 
@@ -668,22 +669,26 @@ Authorization: Bearer <token>
 
 ### **Backend Configuration**
 Ensure your backend is running with cross-origin support:
-- Backend URL: `http://192.168.100.7:8080` (or your backend IP)
+- **Production Backend URL**: `https://evently-avc4.onrender.com`
+- **Local Development URL**: `http://localhost:8080`
 - CORS enabled for your frontend domain
 - JWT authentication configured
 
 ### **Frontend Environment Variables**
 Create `.env` file in your frontend project:
 ```env
-# React/Next.js
-REACT_APP_API_BASE_URL=http://192.168.100.7:8080
+# For Production (deployed backend)
+REACT_APP_API_BASE_URL=https://evently-avc4.onrender.com
 REACT_APP_API_VERSION=v1
 
+# For Local Development
+# REACT_APP_API_BASE_URL=http://localhost:8080
+
 # Vue/Nuxt
-VUE_APP_API_BASE_URL=http://192.168.100.7:8080
+VUE_APP_API_BASE_URL=https://evently-avc4.onrender.com
 
 # Vite
-VITE_API_BASE_URL=http://192.168.100.7:8080
+VITE_API_BASE_URL=https://evently-avc4.onrender.com
 ```
 
 ## **Step 2: API Client Setup**
