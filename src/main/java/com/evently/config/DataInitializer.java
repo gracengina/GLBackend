@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import com.evently.model.Event;
 import com.evently.model.Guest;
@@ -30,8 +29,9 @@ import com.evently.repository.VendorProfileRepository;
 /**
  * Data initialization for fresh database.
  * Creates sample data to test the application functionality.
+ * TEMPORARILY DISABLED - Causing deployment issues
  */
-@Component
+//@Component
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
@@ -66,9 +66,15 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Only initialize if database is empty
-        if (userRepository.count() == 0) {
-            initializeData();
+        try {
+            // Only initialize if database is empty
+            if (userRepository.count() == 0) {
+                initializeData();
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR in DataInitializer: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
     }
 
