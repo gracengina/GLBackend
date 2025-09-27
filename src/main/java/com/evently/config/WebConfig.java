@@ -61,48 +61,32 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Configure CORS for web MVC (additional to security CORS).
-     * Allows frontend from different laptops to access the API.
+     * Allows frontend from ANY origin to access the API.
+     * WARNING: This allows all domains - use with caution in production!
      */
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
-        logger.info("Configuring CORS with allowed origins: {}", String.join(", ", allowedOrigins));
+        logger.info("Configuring CORS to allow ALL ORIGINS");
         
+        // Allow ALL origins for all endpoints
         registry.addMapping("/**")
-                .allowedOriginPatterns(allowedOrigins)
-                .allowedMethods(allowedMethods)
-                .allowedHeaders(allowedHeaders)
-                .allowCredentials(allowCredentials)
-                .maxAge(maxAge);
+                .allowedOriginPatterns("*")  // Allow all origins
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
                 
-        // Additional permissive configuration for development and deployment
+        // Specific mapping for API endpoints - allow all origins
         registry.addMapping("/api/**")
-                .allowedOriginPatterns(
-                    "http://192.168.*:*", 
-                    "http://10.0.*:*", 
-                    "http://172.16.*:*",
-                    "http://127.0.0.1:*",
-                    "http://localhost:*",
-                    "https://*.onrender.com",
-                    "https://*.netlify.app",
-                    "https://*.vercel.app"
-                )
+                .allowedOriginPatterns("*")  // Allow all origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);
 
-        // Additional mapping for auth endpoints specifically
+        // Specific mapping for auth endpoints - allow all origins
         registry.addMapping("/auth/**")
-                .allowedOriginPatterns(
-                    "http://192.168.*:*", 
-                    "http://10.0.*:*", 
-                    "http://172.16.*:*",
-                    "http://127.0.0.1:*",
-                    "http://localhost:*",
-                    "https://*.onrender.com",
-                    "https://*.netlify.app", 
-                    "https://*.vercel.app"
-                )
+                .allowedOriginPatterns("*")  // Allow all origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

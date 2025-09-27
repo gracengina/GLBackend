@@ -23,6 +23,7 @@ import com.evently.service.UserService;
 import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.HashMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  * Authentication Controller.
@@ -30,6 +31,7 @@ import java.util.HashMap;
  */
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*", allowCredentials = "true")  // Allow all origins
 public class AuthController {
 
     @Autowired
