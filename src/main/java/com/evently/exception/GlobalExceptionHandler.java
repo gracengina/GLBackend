@@ -229,6 +229,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex, HttpServletRequest request) {
         
+        // Ignore favicon.ico errors - they're harmless browser requests
+        if (request.getRequestURI().equals("/favicon.ico")) {
+            logger.debug("Ignoring favicon.ico request error: {}", ex.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        
         ErrorResponse errorResponse = new ErrorResponse(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "Internal Server Error",
