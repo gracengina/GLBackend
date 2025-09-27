@@ -12,7 +12,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -61,54 +60,15 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Configure CORS for web MVC (additional to security CORS).
-     * Allows frontend from specific origins to access the API with credentials.
+     * Note: CORS is now primarily handled by CorsConfig with Spring Security
      */
+    /*
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
-        logger.info("Configuring CORS to allow specific origins with credentials");
-        
-        // Allow specific origins for all endpoints with credentials
-        registry.addMapping("/**")
-                .allowedOrigins(
-                    "https://lajoc-eventease.vercel.app",  // Your Vercel frontend
-                    "http://localhost:3000",               // Local development
-                    "http://localhost:5500",               // Live Server
-                    "http://127.0.0.1:5500",              // Live Server alternative
-                    "http://localhost:8080"                // Alternative local port
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)  // Allow credentials
-                .maxAge(3600);
-                
-        // Specific mapping for API endpoints with credentials
-        registry.addMapping("/api/**")
-                .allowedOrigins(
-                    "https://lajoc-eventease.vercel.app",
-                    "http://localhost:3000",
-                    "http://localhost:5500", 
-                    "http://127.0.0.1:5500",
-                    "http://localhost:8080"
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
-
-        // Specific mapping for auth endpoints with credentials
-        registry.addMapping("/auth/**")
-                .allowedOrigins(
-                    "https://lajoc-eventease.vercel.app",
-                    "http://localhost:3000",
-                    "http://localhost:5500",
-                    "http://127.0.0.1:5500", 
-                    "http://localhost:8080"
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+        // CORS configuration moved to CorsConfig for better Spring Security integration
+        logger.info("CORS configuration handled by CorsConfig");
     }
+    */
 
     /**
      * Create upload directory on application startup.
