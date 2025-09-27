@@ -53,8 +53,6 @@ public class SecurityConfig {
                     "/health", "/health/**",
                     "/actuator/health",
                     "/auth/**",                    // JWT authentication endpoints
-                    "/oauth2/**",                  // OAuth2 endpoints
-                    "/login/oauth2/**",            // OAuth2 login endpoints
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/favicon.ico",
@@ -66,10 +64,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow all OPTIONS requests
                 .requestMatchers(HttpMethod.GET, "/api/vendors/**", "/api/events/**").permitAll()  // Specific GET endpoints
                 .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .defaultSuccessUrl("/oauth2/success", true)  // Redirect to our OAuth2 controller
-                .failureUrl("/oauth2/failure")
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
