@@ -61,6 +61,7 @@ public class SecurityConfig {
                     "/authenticate",
                     "/api/docs"                    // Added API docs endpoint
                 ).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow all OPTIONS requests
                 .requestMatchers(HttpMethod.GET, "/api/vendors/**", "/api/events/**").permitAll()  // Specific GET endpoints
                 .anyRequest().authenticated()
             )
