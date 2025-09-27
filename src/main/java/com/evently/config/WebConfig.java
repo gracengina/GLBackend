@@ -61,32 +61,52 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * Configure CORS for web MVC (additional to security CORS).
-     * Allows frontend from ANY origin to access the API.
-     * WARNING: This allows all domains - use with caution in production!
+     * Allows frontend from specific origins to access the API with credentials.
      */
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
-        logger.info("Configuring CORS to allow ALL ORIGINS");
+        logger.info("Configuring CORS to allow specific origins with credentials");
         
-        // Allow ALL origins for all endpoints
+        // Allow specific origins for all endpoints with credentials
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")  // Allow all origins
+                .allowedOrigins(
+                    "https://lajoc-eventease.vercel.app",  // Your Vercel frontend
+                    "http://localhost:3000",               // Local development
+                    "http://localhost:5500",               // Live Server
+                    "http://127.0.0.1:5500",              // Live Server alternative
+                    "http://localhost:8080"                // Alternative local port
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .allowCredentials(true)  // Allow credentials
                 .maxAge(3600);
                 
-        // Specific mapping for API endpoints - allow all origins
+        // Specific mapping for API endpoints with credentials
         registry.addMapping("/api/**")
-                .allowedOriginPatterns("*")  // Allow all origins
+                .allowedOrigins(
+                    "https://lajoc-eventease.vercel.app",
+                    "http://localhost:3000",
+                    "http://localhost:5500", 
+                    "http://127.0.0.1:5500",
+                    "http://localhost:8080"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .allowCredentials(true)
                 .maxAge(3600);
 
-        // Specific mapping for auth endpoints - allow all origins
+        // Specific mapping for auth endpoints with credentials
         registry.addMapping("/auth/**")
-                .allowedOriginPatterns("*")  // Allow all origins
+                .allowedOrigins(
+                    "https://lajoc-eventease.vercel.app",
+                    "http://localhost:3000",
+                    "http://localhost:5500",
+                    "http://127.0.0.1:5500", 
+                    "http://localhost:8080"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .allowCredentials(true)
                 .maxAge(3600);
     }
 
