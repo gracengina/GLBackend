@@ -77,41 +77,41 @@ public class DataInitializer implements CommandLineRunner {
 
         try {
             // Create 2 planners
-            User planner1 = createUser("eventplanner", "planner@evently.com", "Event", "Planner", false, true);
-            User planner2 = createUser("weddingpro", "wedding@evently.com", "Wedding", "Professional", false, true);
+            User planner1 = createUser("eventplanner", "planner@gmail.com", "Event", "Planner", false, true);
+            User planner2 = createUser("weddingpro", "wedding@gmail.com", "Wedding", "Professional", false, true);
             
             // Create 5 vendors
-            User photographer = createUser("photographer1", "photo1@vendor.com", "John", "Smith", true, false);
-            User caterer = createUser("caterer1", "catering1@vendor.com", "Jane", "Doe", true, false);
-            User dj = createUser("dj1", "dj1@vendor.com", "David", "Brown", true, false);
-            User decorator = createUser("decorator1", "decor1@vendor.com", "Emma", "Davis", true, false);
-            User florist = createUser("florist1", "florist1@vendor.com", "Maria", "Taylor", true, false);
+            User photographer = createUser("photographer1", "photo1@gmail.com", "John", "Smith", true, false);
+            User caterer = createUser("caterer1", "catering1@gmail.com", "Jane", "Doe", true, false);
+            User dj = createUser("dj1", "dj1@gmail.com", "David", "Brown", true, false);
+            User decorator = createUser("decorator1", "decor1@gmail.com", "Emma", "Davis", true, false);
+            User florist = createUser("florist1", "florist1@gmail.com", "Maria", "Taylor", true, false);
             
             // Create 3 customers
-            User customer1 = createUser("customer1", "customer1@example.com", "Alice", "Johnson", false, false);
-            User customer2 = createUser("customer2", "customer2@example.com", "Bob", "Wilson", false, false);
-            User customer3 = createUser("customer3", "customer3@example.com", "Carol", "Davis", false, false);
+            User customer1 = createUser("customer1", "customer1@gmail.com", "Alice", "Johnson", false, false);
+            User customer2 = createUser("customer2", "customer2@gmail.com", "Bob", "Wilson", false, false);
+            User customer3 = createUser("customer3", "customer3@gmail.com", "Carol", "Davis", false, false);
 
             // Create vendor profiles for each vendor
             VendorProfile photographerProfile = createVendorProfile(photographer, "Smith Photography Studio", 
                 "Professional event and wedding photography with 10+ years experience", 
-                "Downtown, City Center", "john@smithphoto.com | (555) 123-4567");
+                "Downtown, City Center", "john.smith@gmail.com | (555) 123-4567");
                 
             VendorProfile catererProfile = createVendorProfile(caterer, "Jane's Gourmet Catering", 
                 "Full-service catering for weddings, corporate events, and special occasions", 
-                "Westside, Business District", "jane@gourmetcatering.com | (555) 234-5678");
+                "Westside, Business District", "jane.doe@gmail.com | (555) 234-5678");
                 
             VendorProfile djProfile = createVendorProfile(dj, "DJ Dave's Entertainment", 
                 "Professional DJ services with lighting and sound systems for all events", 
-                "City Center", "david@djdave.com | (555) 345-6789");
+                "City Center", "david.brown@gmail.com | (555) 345-6789");
                 
             VendorProfile decoratorProfile = createVendorProfile(decorator, "Emma's Event Designs", 
                 "Creative event decoration and styling for memorable occasions", 
-                "Arts District", "emma@eventdesigns.com | (555) 456-7890");
+                "Arts District", "emma.davis@gmail.com | (555) 456-7890");
                 
             VendorProfile floristProfile = createVendorProfile(florist, "Taylor's Floral Boutique", 
                 "Beautiful flower arrangements for weddings and events", 
-                "Garden District", "maria@floralboutique.com | (555) 567-8901");
+                "Garden District", "maria.taylor@gmail.com | (555) 567-8901");
 
             // Add reviews for each vendor
             createReview(photographerProfile, customer1, 5, "Absolutely amazing photographer! Captured every moment perfectly.");
