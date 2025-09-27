@@ -104,6 +104,26 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email)
                 .map(userMapper::toUserDTO);
     }
+
+    /**
+     * Find user entity by email (for OAuth2).
+     */
+    @Transactional(readOnly = true)
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Create a new user (for OAuth2).
+     */
+    public User createUser(User user) {
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        return userRepository.save(user);
+    }
     
     /**
      * Update user profile.
