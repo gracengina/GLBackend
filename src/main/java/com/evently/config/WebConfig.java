@@ -73,7 +73,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*")  // Allow all origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(3600);
                 
         // Specific mapping for API endpoints - allow all origins
@@ -81,7 +80,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*")  // Allow all origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(3600);
 
         // Specific mapping for auth endpoints - allow all origins
@@ -89,7 +87,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*")  // Allow all origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(3600);
     }
 
