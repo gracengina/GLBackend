@@ -22,11 +22,11 @@ public class ReviewDTO {
     
     private Long id;
     
-    // Vendor information (simplified)
+    // Vendor information 
     private Long vendorId;
     private String vendorBusinessName;
     
-    // Customer information (simplified)
+    // Customer information 
     private Long customerId;
     private String customerUsername;
     private String customerFullName;
