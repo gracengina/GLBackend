@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.evently.model.ServiceCategory;
 
-/**
- * Repository interface for ServiceCategory entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory, Long> {
     
