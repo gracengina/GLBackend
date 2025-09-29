@@ -121,7 +121,7 @@ public class HealthController {
     }
 
     /**
-     * Get application uptime (simplified).
+     * Get application uptime 
      */
     private String getUptime() {
         long uptimeMs = System.currentTimeMillis() - startTime;
