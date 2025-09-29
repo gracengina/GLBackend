@@ -24,12 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Guest entity converted from Django Guest model.
- * Represents a guest invited to an event with RSVP status.
- * 
- * Maps to Django table: events_guest
- */
+
 @Entity
 @Table(name = "events_guest")
 @Data
@@ -66,7 +61,7 @@ public class Guest {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user; // Optional - guest might not be a registered user
+    private User user; 
     
     @Column(name = "name", length = 255)
     @Size(max = 255)
@@ -95,7 +90,7 @@ public class Guest {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
-    // Lifecycle callbacks
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -108,7 +103,7 @@ public class Guest {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper methods
+    
     public String getDisplayName() {
         if (name != null && !name.trim().isEmpty()) {
             return name.trim();
