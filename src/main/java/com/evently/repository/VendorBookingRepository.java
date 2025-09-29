@@ -15,10 +15,7 @@ import com.evently.model.VendorBooking;
 import com.evently.model.VendorBooking.BookingStatus;
 import com.evently.model.VendorProfile;
 
-/**
- * Repository interface for VendorBooking entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface VendorBookingRepository extends JpaRepository<VendorBooking, Long> {
     
