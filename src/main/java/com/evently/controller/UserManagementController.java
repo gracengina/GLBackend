@@ -68,7 +68,7 @@ public class UserManagementController {
             UserDTO currentUser = userService.getUserByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new IllegalArgumentException("Current user not found"));
             
-            // Allow users to update their own profile, or admin to update any profile
+            // Allow users to update their own profile
             if (!currentUser.getId().equals(id)) {
             }
             
