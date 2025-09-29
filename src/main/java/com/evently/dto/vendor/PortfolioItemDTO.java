@@ -18,14 +18,14 @@ public class PortfolioItemDTO {
     
     private Long id;
     
-    // Vendor information (simplified)
+    // Vendor information 
     private Long vendorId;
     private String vendorBusinessName;
     
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
     
-    private String image; // File path/URL
+    private String image; // File path
     
     private LocalDateTime createdAt;
 }
