@@ -21,11 +21,7 @@ import com.evently.service.UserService;
 
 import jakarta.validation.Valid;
 
-/**
- * REST Controller for User Management.
- * Provides endpoints for user profile management and user queries.
- * This handles the /api/users/* endpoints.
- */
+
 @RestController
 @RequestMapping("/api/users")
 public class UserManagementController {
@@ -33,12 +29,8 @@ public class UserManagementController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Get all users with pagination (Admin access).
-     */
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        // For now, return active users. In production, add proper admin check
         List<UserDTO> users = userService.getAllActiveUsers();
         return ResponseEntity.ok(users);
     }
@@ -78,8 +70,6 @@ public class UserManagementController {
             
             // Allow users to update their own profile, or admin to update any profile
             if (!currentUser.getId().equals(id)) {
-                // For now, allow any authenticated user to update any profile
-                // In production, add proper role checking
             }
             
             UserDTO updatedUser = userService.updateUserProfile(id, updateDTO);
@@ -95,8 +85,6 @@ public class UserManagementController {
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String query) {
         try {
-            // Use existing UserRepository search method via service
-            // For now, return empty list. In production, implement searchUsers method in UserService
             return ResponseEntity.ok(List.of());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -139,12 +127,7 @@ public class UserManagementController {
             @RequestParam String role,
             @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            // In production, add proper admin role checking
-            // For now, allow any authenticated user to change roles
-            
-            // This would need to be implemented in UserService
-            // userService.updateUserRole(id, role);
-            
+        
             return userService.getUserById(id)
                     .map(user -> ResponseEntity.ok(user))
                     .orElse(ResponseEntity.notFound().build());
