@@ -15,10 +15,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Web Configuration.
- * Handles file upload directories and static resource serving.
- */
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -42,37 +39,21 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.cors.max-age:3600}")
     private long maxAge;
 
-    /**
-     * Configure static resource handling for uploaded files.
-     */
+    
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
-        // Serve uploaded files
+        
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + uploadDir + "/")
-                .setCachePeriod(86400); // Cache for 24 hours
+                .setCachePeriod(86400); 
 
-        // Serve static assets
+        
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
                 .setCachePeriod(86400);
     }
 
-    /**
-     * Configure CORS for web MVC (additional to security CORS).
-     * Note: CORS is now primarily handled by CorsConfig with Spring Security
-     */
-    /*
-    @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
-        // CORS configuration moved to CorsConfig for better Spring Security integration
-        logger.info("CORS configuration handled by CorsConfig");
-    }
-    */
-
-    /**
-     * Create upload directory on application startup.
-     */
+ 
     @EventListener(ApplicationReadyEvent.class)
     public void createUploadDirectory() {
         try {
@@ -82,7 +63,7 @@ public class WebConfig implements WebMvcConfigurer {
                 logger.info("Created upload directory: {}", uploadPath.toAbsolutePath());
             }
 
-            // Create subdirectories for different file types
+            
             createSubDirectory(uploadPath, "profiles");
             createSubDirectory(uploadPath, "events");
             createSubDirectory(uploadPath, "vendors");
@@ -95,9 +76,7 @@ public class WebConfig implements WebMvcConfigurer {
         }
     }
 
-    /**
-     * Create subdirectory if it doesn't exist.
-     */
+  
     private void createSubDirectory(Path parentPath, String subdirName) {
         try {
             Path subdirPath = parentPath.resolve(subdirName);
