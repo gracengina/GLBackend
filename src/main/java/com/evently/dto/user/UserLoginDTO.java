@@ -22,6 +22,6 @@ public class UserLoginDTO {
     @NotBlank(message = "Password is required")
     private String password;
     
-    // Optional: remember me functionality
+    // remember me functionality
     private Boolean rememberMe = false;
 }
