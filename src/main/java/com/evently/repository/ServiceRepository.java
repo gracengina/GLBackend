@@ -12,10 +12,7 @@ import com.evently.model.Service;
 import com.evently.model.ServiceCategory;
 import com.evently.model.VendorProfile;
 
-/**
- * Repository interface for Service entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface ServiceRepository extends JpaRepository<Service, Long> {
     
