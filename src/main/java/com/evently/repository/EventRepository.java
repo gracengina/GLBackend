@@ -11,10 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.evently.model.Event;
 import com.evently.model.User;
 
-/**
- * Repository interface for Event entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
     
