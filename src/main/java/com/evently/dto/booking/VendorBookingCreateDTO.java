@@ -27,5 +27,5 @@ public class VendorBookingCreateDTO {
     @Size(max = 1000, message = "Notes must not exceed 1000 characters")
     private String notes;
     
-    // Status will default to PENDING
+    
 }
