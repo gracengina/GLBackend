@@ -82,17 +82,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    /** Skip filter for public endpoints and CORS preflight. */
+    
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         String path = request.getRequestURI();
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            return true; // allow CORS preflight
+            return true; 
         }
         return path.equals("/")
             || path.startsWith("/health")
             || path.startsWith("/actuator/health")
-            || path.startsWith("/auth/")        // Fixed: Changed from /api/auth/ to /auth/
+            || path.startsWith("/auth/")        
             || path.startsWith("/swagger-ui/")
             || path.startsWith("/v3/api-docs/")
             || path.equals("/authenticate")
