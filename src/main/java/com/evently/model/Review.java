@@ -20,12 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Review entity converted from Django Review model.
- * Represents a customer review for a vendor.
- * 
- * Maps to Django table: vendors_review
- */
+
 @Entity
 @Table(name = "vendors_review")
 @Data
@@ -52,7 +47,7 @@ public class Review {
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer rating; // 1-5 stars
+    private Integer rating; 
     
     @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;
@@ -60,13 +55,13 @@ public class Review {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
-    // Lifecycle callbacks
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
     
-    // Helper methods
+    
     public boolean hasComment() {
         return comment != null && !comment.trim().isEmpty();
     }
