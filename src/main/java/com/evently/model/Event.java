@@ -25,19 +25,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/**
- * Event entity converted from Django Event model.
- * Represents an event managed by a planner with guests and vendor bookings.
- * 
- * Maps to Django table: events_event
- */
+
 @Entity
 @Table(name = "events_event")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"guests", "vendorBookings"}) // Avoid circular references
+@ToString(exclude = {"guests", "vendorBookings"}) 
 public class Event {
     
     @Id
