@@ -11,10 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.evently.model.User;
 import com.evently.model.VendorProfile;
 
-/**
- * Repository interface for VendorProfile entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface VendorProfileRepository extends JpaRepository<VendorProfile, Long> {
     
