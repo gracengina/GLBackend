@@ -47,9 +47,6 @@ public class EventService {
     @Autowired
     private GuestMapper guestMapper;
 
-    // -------------------------------------------------------------------------
-    // Event Management
-    // -------------------------------------------------------------------------
 
     public EventDTO createEvent(EventCreateDTO createDTO, Long plannerId) {
         User planner = userRepository.findById(plannerId)
@@ -121,10 +118,6 @@ public class EventService {
                 eventRepository.findByTitleContainingIgnoreCaseOrLocationContainingIgnoreCase(query, query));
     }
 
-    // -------------------------------------------------------------------------
-    // Guest Management
-    // -------------------------------------------------------------------------
-
     public GuestDto addGuestToEvent(Long eventId, GuestCreateUpdateDTO guestDTO, Long plannerId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
@@ -190,9 +183,7 @@ public class EventService {
         return guestMapper.toGuestDTO(savedGuest);
     }
 
-    // -------------------------------------------------------------------------
-    // Event Statistics
-    // -------------------------------------------------------------------------
+    
 
     @Transactional(readOnly = true)
     public EventStatsDTO getEventStatistics(Long eventId) {
