@@ -25,19 +25,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/**
- * VendorProfile entity converted from Django VendorProfile model.
- * Represents a vendor's business profile information.
- * 
- * Maps to Django table: vendors_vendorprofile
- */
+
 @Entity
 @Table(name = "vendors_vendorprofile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"services", "portfolioItems", "reviews"}) // Avoid circular references
+@ToString(exclude = {"services", "portfolioItems", "reviews"}) 
 public class VendorProfile {
     
     @Id
@@ -66,7 +61,7 @@ public class VendorProfile {
     private String contactInfo;
     
     @Column(name = "profile_pic", length = 255)
-    private String profilePic; // File path/URL
+    private String profilePic; 
     
     @Column(name = "is_verified")
     private Boolean isVerified = false;
@@ -77,7 +72,7 @@ public class VendorProfile {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
-    // Relationships
+    
     @OneToMany(mappedBy = "vendor", fetch = FetchType.LAZY)
     private List<Service> services = new ArrayList<>();
     
@@ -87,7 +82,7 @@ public class VendorProfile {
     @OneToMany(mappedBy = "vendor", fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
     
-    // Lifecycle callbacks
+ 
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -103,7 +98,7 @@ public class VendorProfile {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper methods
+
     public boolean isVerified() {
         return Boolean.TRUE.equals(isVerified);
     }
