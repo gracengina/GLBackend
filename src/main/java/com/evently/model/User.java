@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    // Django AbstractUser fields
+
     @Column(name = "username", unique = true, nullable = false, length = 150)
     private String username;
     
