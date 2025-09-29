@@ -23,12 +23,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Service entity converted from Django Service model.
- * Represents a service offered by a vendor.
- * 
- * Maps to Django table: vendors_service
- */
+
 @Entity
 @Table(name = "vendors_service")
 @Data
@@ -73,7 +68,7 @@ public class Service {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
-    // Lifecycle callbacks
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -86,7 +81,7 @@ public class Service {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper methods
+    
     public String getFormattedPrice() {
         return price != null ? "$" + price.toString() : "Price not set";
     }
