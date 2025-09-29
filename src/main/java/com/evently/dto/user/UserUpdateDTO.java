@@ -25,7 +25,7 @@ public class UserUpdateDTO {
     @Size(max = 254, message = "Email must not exceed 254 characters")
     private String email;
     
-    // Users can opt in/out of vendor or planner roles
+
     private Boolean isVendor;
     
     private Boolean isPlanner;
