@@ -23,6 +23,5 @@ public class GuestCreateUpdateDTO {
 
     private String dietaryRestrictions;
 
-    /** The event this guest belongs to */
     private Long eventId;
 }
