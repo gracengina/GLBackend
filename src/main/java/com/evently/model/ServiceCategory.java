@@ -17,21 +17,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-/**
- * ServiceCategory entity converted from Django ServiceCategory model.
- * Represents a category for vendor services (e.g., Photography, Catering, Music).
- * 
- * Maps to Django table: vendors_servicecategory
- */
+import lombok.ToString
+    
 @Entity
 @Table(name = "vendors_servicecategory")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = "services") // Avoid circular references
+@ToString(exclude = "services") 
 public class ServiceCategory {
     
     @Id
@@ -46,11 +40,11 @@ public class ServiceCategory {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     
-    // Relationships
+    
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Service> services = new ArrayList<>();
     
-    // Helper methods
+    
     public int getServicesCount() {
         return services != null ? services.size() : 0;
     }
