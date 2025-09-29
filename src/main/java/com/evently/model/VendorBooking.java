@@ -21,12 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * VendorBooking entity converted from Django VendorBooking model.
- * Represents a booking of a vendor service for an event.
- * 
- * Maps to Django table: events_vendorbooking
- */
+
 @Entity
 @Table(name = "events_vendorbooking")
 @Data
@@ -84,7 +79,7 @@ public class VendorBooking {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
-    // Lifecycle callbacks
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -97,7 +92,7 @@ public class VendorBooking {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper methods
+    
     public boolean isPending() {
         return BookingStatus.PENDING.equals(status);
     }
