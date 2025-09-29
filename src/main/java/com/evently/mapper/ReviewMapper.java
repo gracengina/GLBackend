@@ -9,17 +9,11 @@ import org.mapstruct.Named;
 import com.evently.model.Review;
 import com.evently.dto.vendor.ReviewDTO;
 
-/**
- * MapStruct mapper for Review entity and DTOs.
- * Handles conversion between Review entity and ReviewDTO.
- */
+
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
     
-    /**
-     * Convert Review entity to ReviewDTO.
-     * Maps vendor and customer information.
-     */
+    
     @Mapping(target = "vendorId", source = "vendor.id")
     @Mapping(target = "vendorBusinessName", source = "vendor.businessName")
     @Mapping(target = "customerId", source = "user.id")
@@ -27,26 +21,18 @@ public interface ReviewMapper {
     @Mapping(target = "customerFullName", source = "user", qualifiedByName = "getCustomerFullName")
     ReviewDTO toReviewDTO(Review review);
     
-    /**
-     * Convert list of Review entities to list of ReviewDTOs.
-     */
+    
     List<ReviewDTO> toReviewDTOList(List<Review> reviews);
     
-    /**
-     * Convert ReviewDTO to Review entity.
-     * Excludes computed fields and relationships.
-     */
+    
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "vendor", ignore = true) // Will be set separately
-    @Mapping(target = "user", ignore = true) // Will be set separately
+    @Mapping(target = "vendor", ignore = true)
+    @Mapping(target = "user", ignore = true) 
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(source = "rating", target = "rating")
     @Mapping(source = "comment", target = "comment")
     Review toReview(ReviewDTO reviewDTO);
     
-    /**
-     * Custom method to get customer full name.
-     */
     @Named("getCustomerFullName")
     default String getCustomerFullName(com.evently.model.User customer) {
         return customer != null ? customer.getFullName() : null;
