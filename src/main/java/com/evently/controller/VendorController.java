@@ -44,11 +44,7 @@ public class VendorController {
     @Autowired
     private UserService userService;
     
-    // Vendor Profile Management
-    
-    /**
-     * Create vendor profile.
-     */
+   
     @PostMapping("/profile")
     public ResponseEntity<VendorProfileDTO> createVendorProfile(
             @Valid @RequestBody VendorProfileCreateUpdateDTO createDTO,
@@ -116,11 +112,7 @@ public class VendorController {
         }
     }
     
-    // Query Endpoints
     
-    /**
-     * Get all vendor profiles with pagination.
-     */
     @GetMapping
     public ResponseEntity<Page<VendorProfileDTO>> getAllVendorProfiles(Pageable pageable) {
         Page<VendorProfileDTO> vendors = vendorService.getAllVendorProfiles(pageable);
@@ -154,11 +146,7 @@ public class VendorController {
         return ResponseEntity.ok(vendors);
     }
     
-    // Service Management
-    
-    /**
-     * Add service to vendor profile.
-     */
+ 
     @PostMapping("/{vendorId}/services")
     public ResponseEntity<ServiceDTO> addServiceToVendor(
             @PathVariable Long vendorId,
@@ -236,11 +224,7 @@ public class VendorController {
         return ResponseEntity.ok(services);
     }
     
-    // Portfolio Management
     
-    /**
-     * Add portfolio item to vendor.
-     */
     @PostMapping("/{vendorId}/portfolio")
     public ResponseEntity<PortfolioItemDTO> addPortfolioItem(
             @PathVariable Long vendorId,
@@ -309,11 +293,7 @@ public class VendorController {
         }
     }
     
-    // Review Management
-    
-    /**
-     * Add review for vendor.
-     */
+   
     @PostMapping("/{vendorId}/reviews")
     public ResponseEntity<ReviewDTO> addReviewForVendor(
             @PathVariable Long vendorId,
@@ -393,11 +373,7 @@ public class VendorController {
         }
     }
     
-    // Statistics Endpoints
     
-    /**
-     * Get vendor statistics.
-     */
     @GetMapping("/{vendorId}/stats")
     public ResponseEntity<VendorStatsDTO> getVendorStatistics(@PathVariable Long vendorId) {
         try {
