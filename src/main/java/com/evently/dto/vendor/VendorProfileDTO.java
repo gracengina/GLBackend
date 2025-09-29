@@ -20,7 +20,7 @@ public class VendorProfileDTO {
     
     private Long id;
     
-    // User information (simplified)
+    // User information 
     private Long userId;
     private String username;
     private String fullName;
