@@ -46,23 +46,23 @@ public class SecurityConfig {
                                                    AuthenticationProvider authenticationProvider) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Use custom CORS config
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))  
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
                     "/health", "/health/**",
                     "/actuator/health",
-                    "/auth/**",                    // JWT authentication endpoints
+                    "/auth/**",                    
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/favicon.ico",
                     "/version",
                     "/api/endpoints/**",
                     "/authenticate",
-                    "/api/docs"                    // Added API docs endpoint
+                    "/api/docs"                    
                 ).permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow all OPTIONS requests
-                .requestMatchers(HttpMethod.GET, "/api/vendors/**", "/api/events/**").permitAll()  // Specific GET endpoints
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  
+                .requestMatchers(HttpMethod.GET, "/api/vendors/**", "/api/events/**").permitAll()  
                 .anyRequest().authenticated()
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
