@@ -38,7 +38,7 @@ public class UserController {
             // Generate the JWT token using JwtTokenProvider
             String token = jwtTokenProvider.generateToken(authentication);
 
-            // Optional: also return a refresh token if needed
+            
             String refreshToken = jwtTokenProvider.generateRefreshToken(username);
 
             return ResponseEntity.ok().body(
