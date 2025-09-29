@@ -13,10 +13,7 @@ import com.evently.model.Guest;
 import com.evently.model.Guest.RsvpStatus;
 import com.evently.model.User;
 
-/**
- * Repository interface for Guest entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long> {
     
