@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.evently.model.PortfolioItem;
 import com.evently.model.VendorProfile;
 
-/**
- * Repository interface for PortfolioItem entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface PortfolioItemRepository extends JpaRepository<PortfolioItem, Long> {
     
