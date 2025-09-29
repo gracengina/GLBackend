@@ -34,5 +34,5 @@ public class EventCreateDTO {
     @Size(max = 255, message = "Location must not exceed 255 characters")
     private String location;
     
-    // Note: plannerId will be set from the authenticated user context
+    
 }
