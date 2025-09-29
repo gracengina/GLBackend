@@ -21,10 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
-/**
- * Global Exception Handler.
- * Provides centralized exception handling for all REST controllers.
- */
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
