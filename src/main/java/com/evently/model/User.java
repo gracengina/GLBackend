@@ -22,12 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * User entity converted from Django's AbstractUser.
- * Implements Spring Security UserDetails for authentication.
- * 
- * Maps to Django table: auth_user with additional fields
- */
+
 @Entity
 @Table(name = "users_user")
 @Data
@@ -65,14 +60,14 @@ public class User implements UserDetails {
     @Column(name = "date_joined")
     private LocalDateTime dateJoined;
     
-    // Custom fields from Django User model
+    
     @Column(name = "is_vendor")
     private Boolean isVendor = false;
     
     @Column(name = "is_planner")
     private Boolean isPlanner = false;
     
-    // Spring Security UserDetails implementation
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -84,7 +79,7 @@ public class User implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_PLANNER"));
         }
         
-        // Default user role
+        
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         
         return authorities;
@@ -95,7 +90,7 @@ public class User implements UserDetails {
         return Boolean.TRUE.equals(isActive);
     }
     
-    // Helper methods
+    
     public String getFullName() {
         StringBuilder fullName = new StringBuilder();
         if (firstName != null && !firstName.trim().isEmpty()) {
@@ -110,7 +105,7 @@ public class User implements UserDetails {
         return fullName.length() > 0 ? fullName.toString() : username;
     }
     
-    // Pre-persist to set default values
+    
     @PrePersist
     protected void onCreate() {
         if (dateJoined == null) {
@@ -127,11 +122,10 @@ public class User implements UserDetails {
         }
     }
     
-    // Pre-update to handle entity updates
+    
     @PreUpdate
     protected void onUpdate() {
-        // Update last login time when user data is modified
-        // This can be customized based on specific update scenarios
+    
     }
     
     @Override
