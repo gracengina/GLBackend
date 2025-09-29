@@ -19,12 +19,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * PortfolioItem entity converted from Django PortfolioItem model.
- * Represents a portfolio item (image/file) for a vendor's work showcase.
- * 
- * Maps to Django table: vendors_portfolioitem
- */
 @Entity
 @Table(name = "vendors_portfolioitem")
 @Data
@@ -43,7 +37,7 @@ public class PortfolioItem {
     private VendorProfile vendor;
     
     @Column(name = "image", length = 255)
-    private String image; // File path/URL
+    private String image; 
     
     @Column(name = "description", length = 255)
     @Size(max = 255)
@@ -52,13 +46,13 @@ public class PortfolioItem {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
-    // Lifecycle callbacks
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
     
-    // Helper methods
+    
     public boolean hasImage() {
         return image != null && !image.trim().isEmpty();
     }
