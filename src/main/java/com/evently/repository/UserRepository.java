@@ -10,35 +10,31 @@ import org.springframework.stereotype.Repository;
 
 import com.evently.model.User;
 
-/**
- * Repository for User entity.
- * Provides Spring Data JPA query methods for user operations.
- */
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    // Django User.objects.get(username=username)
+   
     Optional<User> findByUsername(String username);
     
-    // Django User.objects.get(email=email)
+    
     Optional<User> findByEmail(String email);
     
-    // Django User.objects.filter(is_vendor=True)
     List<User> findByIsVendorTrue();
     
-    // Django User.objects.filter(is_planner=True)
+  
     List<User> findByIsPlannerTrue();
     
-    // Django User.objects.filter(is_active=True)
+    
     List<User> findByIsActiveTrue();
     
-    // Check if username exists (for validation)
+    
     boolean existsByUsername(String username);
     
-    // Check if email exists (for validation)
+    
     boolean existsByEmail(String email);
     
-    // Find users by partial username or email (for search)
+    
     @Query("SELECT u FROM User u WHERE " +
            "LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
            "LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
