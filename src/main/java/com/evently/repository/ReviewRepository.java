@@ -11,10 +11,7 @@ import com.evently.model.Review;
 import com.evently.model.User;
 import com.evently.model.VendorProfile;
 
-/**
- * Repository interface for Review entity operations.
- * Provides CRUD operations and custom query methods.
- */
+
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     
