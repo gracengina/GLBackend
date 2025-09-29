@@ -10,9 +10,7 @@ import com.evently.model.Guest;
 import com.evently.dto.guest.GuestCreateUpdateDTO;
 import com.evently.dto.guest.GuestDto;
 
-/**
- * MapStruct mapper for Guest entity and DTOs.
- */
+
 @Mapper(componentModel = "spring")
 public interface GuestMapper {
 
