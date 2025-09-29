@@ -28,5 +28,4 @@ public class VendorProfileCreateUpdateDTO {
     @Size(max = 255, message = "Contact info must not exceed 255 characters")
     private String contactInfo;
     
-    // Profile picture will be handled separately through file upload endpoints
 }
