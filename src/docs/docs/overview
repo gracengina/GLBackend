@@ -1,1 +1,25 @@
+# GLBackend - Project Overview
+
+The GLBackend project is a Spring Boot backend application designed to manage events, user accounts, and authentication in a secure, RESTful API structure.  
+It is part of a class project demonstrating backend design, modular architecture, and API best practices.
+
+## Objectives
+- Build a robust event management API.
+- Implement secure authentication and authorization.
+- Apply clean architecture and REST principles.
+- Integrate CORS configuration for frontend communication.
+
+## Key Features
+- Event creation, retrieval, update, and deletion.
+- User registration and login.
+- Role-based access control (admin/planner).
+- CORS and JWT authentication.
+- Pagination and DTO-based responses.
+
+## Tech Stack
+- Language: Java 17+
+- Framework: Spring Boot
+- Build Tool: Maven
+- Database: MySQL or H2
+- Security: Spring Security (JWT)
 
