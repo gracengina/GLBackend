@@ -2,7 +2,7 @@
 
 A comprehensive event planning and vendor management REST API built with Spring Boot. This modern Java application provides a complete solution for event planning, vendor management, and booking systems with enterprise-grade security and scalability.
 
-## 🌟 Features
+##  Features
 
 - **Complete Event Management**: Create, manage, and track events with guest lists
 - **Vendor Management**: Vendor profiles, services, portfolios, and customer reviews
@@ -13,7 +13,7 @@ A comprehensive event planning and vendor management REST API built with Spring 
 - **Health Monitoring**: Built-in health checks and system monitoring
 - **Enterprise Security**: CORS, CSRF protection, security headers, and comprehensive authorization
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Java 17 or higher
@@ -62,7 +62,7 @@ docker build -t evently-backend .
 docker run -p 8080:8080 -e JWT_SECRET=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lMjAyNSIsImlhdCI6MTc1ODU2MTQ3NCwiZXhwIjoxNzU4NjQ3ODc0fQ.2wW11xOr0ddyS8IP_lYeF1pny0U9fQ0vnKpcOBDKcPDOBQm3G0riMKWK7NDukSIjLFDrvqlhn1Y4QFH0FDvwYQ
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Complete Technology Stack
 - **Framework**: Spring Boot 3.5.6
@@ -100,7 +100,7 @@ docker run -p 8080:8080 -e JWT_SECRET=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lM
 - **Vendor Management**: Business profiles, services, portfolios, reviews
 - **Booking System**: Vendor-event relationships, booking workflows
 
-## 🔐 Security & Authentication
+##  Security & Authentication
 
 The application implements comprehensive JWT-based security:
 
@@ -154,7 +154,7 @@ POST /auth/login
 }
 ```
 
-## 📊 Health Monitoring
+##  Health Monitoring
 
 Built-in health monitoring and system diagnostics:
 
@@ -180,7 +180,7 @@ GET /health/ready
 - Service dependencies health
 - Environment and configuration status
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 src/
@@ -200,7 +200,7 @@ src/
 └── test/                             # Test classes
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 Configure these essential environment variables:
@@ -379,7 +379,7 @@ curl "http://localhost:8080/api/vendors?service=catering&location=downtown" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
-## 🔄 Development & Deployment
+##  Development & Deployment
 
 ### Local Development
 ```bash
@@ -452,7 +452,7 @@ java -jar evently-backend.jar --spring.profiles.active=prod
 ./mvnw flyway:clean
 ```
 
-## 🧪 Testing
+##  Testing
 
 ### Test Categories
 - **Unit Tests**: Service layer business logic
@@ -481,7 +481,7 @@ java -jar evently-backend.jar --spring.profiles.active=prod
 - No external dependencies required
 - Fast execution and isolation
 
-## 🤝 Contributing
+##  Contributing
 
 ### Development Setup
 1. Fork the repository
@@ -502,7 +502,7 @@ java -jar evently-backend.jar --spring.profiles.active=prod
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙋‍♂️ Support
+##  Support
 
 ### Getting Help
 - **API Documentation**: http://localhost:8080/api/docs
@@ -528,21 +528,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🎉 Project Status: PRODUCTION READY
+##  Project Status: PRODUCTION READY
 
 This Spring Boot application is **production-ready** with:
 
-✅ **Full REST API** - 50+ endpoints across all domains  
-✅ **JWT Security** - Stateless authentication with role-based authorization  
-✅ **Enterprise Grade** - Comprehensive configuration and error handling  
-✅ **API Documentation** - Built-in API docs and complete setup guides  
-✅ **Testing Suite** - Integration test suite with H2 database  
-✅ **Health Monitoring** - Health checks and system diagnostics  
-✅ **Flexible Deployment** - Docker and JAR deployment options  
+ **Full REST API** - 50+ endpoints across all domains  
+ **JWT Security** - Stateless authentication with role-based authorization  
+ **Enterprise Grade** - Comprehensive configuration and error handling  
+ **API Documentation** - Built-in API docs and complete setup guides  
+ **Testing Suite** - Integration test suite with H2 database  
+ **Health Monitoring** - Health checks and system diagnostics  
+ **Flexible Deployment** - Docker and JAR deployment options  
 
 The application is ready for production deployment and frontend integration!
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Spring Boot Structure
 - **JPA Entities** → Domain models with proper relationships
@@ -561,7 +561,7 @@ The application is ready for production deployment and frontend integration!
 - **Testing**: Comprehensive test framework integration
 - **Monitoring**: Built-in health checks and Actuator metrics
 
-## 🧪 Testing
+##  Testing
 
 Run all tests:
 ```bash
@@ -634,4 +634,4 @@ Run with different profiles:
 
 ---
 
-**💡 Tip**: This Spring Boot application follows industry best practices and is designed for scalability and maintainability.
+** Tip**: This Spring Boot application follows industry best practices and is designed for scalability and maintainability.
